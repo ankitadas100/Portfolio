@@ -632,6 +632,23 @@ background: linear-gradient(-45deg, #8A2BE2, #4B0082, #9370DB, #483D8B);
 .blog_box:hover{
  box-shadow: 2px 0px 6px 0px #8946b2;
 }  
+.service_part{
+    margin-top: 140px;
+    background-color:#f9f2f2;;
+}
+.service_head{
+   padding: 40px;
+   font-size: 70px;
+   font-weight: bold;
+   font-family: sans-serif;
+}
+.service_explain{
+    font-size: 18px;
+    margin-left: 10px;
+    font-family: math;
+    font-weight: 400;
+    font-display: optional;
+}
    
 
 
