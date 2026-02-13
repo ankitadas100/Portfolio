@@ -448,41 +448,30 @@ back-end development.
                 <form class="contact_form" name="submit-to-google-sheet">
 
                     <div class="field">
-                        <input type="text" required>
+                        <input type="text" name="Name" required>
                         <label>Name*</label>
                     </div>
 
                     <div class="field">
-                        <input type="email" required>
+                        <input type="email" name="Email" required>
                         <label>Email*</label>
                     </div>
 
                     <div class="field">
-                        <input type="text" required>
+                        <input type="text" name="Location" required>
                         <label>Location*</label>
                     </div>
-
                     <div class="field">
-                        <select required>
-                            <option value="" disabled selected></option>
-                            <option>200-300</option>
-                            <option>300 - 500</option>
-                            <option>500+</option>
-                        </select>
-                        <label>Budget*</label>
-                    </div>
-
-                    <div class="field">
-                        <input type="text" required>
+                        <input type="text" name="Subject" required>
                         <label>Subject*</label>
                     </div>
 
                     <div class="field">
-                        <textarea rows="4" required></textarea>
+                        <textarea rows="4" name="Message" required></textarea>
                         <label>Message*</label>
                     </div>
 
-                    <button class="submit_btn">
+                    <button class="submit_btn" id="sbtn">
                         Submit
                         <span class="material-symbols-outlined c">
                             send
@@ -526,35 +515,44 @@ back-end development.
     </div>
     <script src="main.js"></script>
         <script>
- 
-  const scriptURL = 'https://script.google.com/macros/s/AKfycbwHpmiIUnMOiOp1SEXJN_KtLhbgXPgFx_JZ5RKdDIzs0j9pgIItOk4fwpLhXNttmNCT/exec';
-  
-  
+  // REPLACE THIS WITH YOUR NEW DEPLOYMENT URL
+  const scriptURL = 'https://script.google.com/macros/s/AKfycbxCqIU5i3tAcq-nEHUOSZg3AXqKl9QFX6ynN5EVN7Ql-8c3Glz0wTKo2XxRc0ghrdb0/exec'; 
   const form = document.forms['submit-to-google-sheet'];
 
   form.addEventListener('submit', e => {
     e.preventDefault();
-    
-    
-    const btn = form.querySelector('button');
-    const originalText = btn.innerHTML;
-    btn.innerHTML = "Sending...";
 
-    fetch(scriptURL, { method: 'POST', body: new FormData(form)})
-      .then(response => {
-        console.log('Success!', response);
-        alert("Message sent successfully!"); // Show a popup message
-        form.reset(); // Clear the form
-        btn.innerHTML = originalText; // Reset button text
+    const btn = document.getElementById('sbtn');
+    const originalText = btn.innerHTML;
+
+    // Update button text
+    btn.innerHTML = "Sending...";
+    btn.disabled = true;
+
+    // FIXED: Use FormData directly. 
+    // This sets the correct headers automatically for Google to accept the request.
+    const formData = new FormData(form);
+
+    fetch(scriptURL, { method: 'POST', body: formData })
+      .then(response => response.json()) 
+      .then(data => {
+        if (data.status === "success") {
+          alert("Message sent successfully!");
+          form.reset();
+        } else {
+          alert("Error: " + data.message);
+        }
       })
       .catch(error => {
         console.error('Error!', error.message);
         alert("Error sending message.");
+      })
+      .finally(() => {
         btn.innerHTML = originalText;
+        btn.disabled = false;
       });
   });
-
-    </script>
+</script>
 
 
 
